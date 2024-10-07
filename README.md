@@ -1,75 +1,8 @@
-# Watchlists
+# React + Vite
 
-## About
-Watchlists is a sleek web application designed for creating and managing your personal movie watchlist. Powered by the OMDB API, it provides a modern and user-friendly interface for searching and organizing your favorite films. Built with Vite, React, and Tailwind CSS, this application is perfect for film enthusiasts wanting to stay organized!
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Live Demo: [Watchlists](https://watchlists-one.vercel.app/)
+Currently, two official plugins are available:
 
----
-
-## Features
-- **Search Movies**: Easily search for movies using the OMDB API.
-- **Manage Watchlists**: Add, edit, and remove movies from your personal watchlist.
-- **Responsive Design**: Built with Tailwind CSS for a modern and responsive UI.
-- **Fast Performance**: Powered by Vite for rapid development and efficient bundling.
-
----
-
-## Technologies Used
-- **Frontend**: 
-  - [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
-  - [Vite](https://vitejs.dev/) - A next-generation front-end tool for faster builds.
-  - [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework for creating custom designs.
-
-- **API**:
-  - [OMDB API](http://www.omdbapi.com/) - A free API for accessing movie data.
-
----
-
-## Getting Started
-
-To get a local copy up and running follow these simple steps:
-
-### Prerequisites
-- Node.js (v14 or later)
-- npm (comes with Node.js)
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/kavanapateel/Watchlists.git
-   cd Watchlists
-   ```
-
-2. Install the dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-4. Open your browser and navigate to `http://localhost:5173`.
-
----
-
-## Usage
-
-1. **Search for Movies**: Use the search bar to find movies by title.
-2. **Add to Watchlist**: Click the "Add to Watchlist" button on the movie detail page.
-3. **Manage Your List**: View and manage your watchlist from the designated section of the app.
-
----
-
-## Contact
-
-For any inquiries, please contact:
-- [Kavana Pateel](mailto:kavanapateel31@gmail.com)
-- GitHub: [kavanapateel](https://github.com/kavanapateel)
-
----
-
-Happy Watching! 🎬✨
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh

@@ -1,35 +1,18 @@
 import { useNavigate } from "react-router-dom"
 import useStore from "../store/useStore"
 import Background from "/bg.jpg"
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import AuthForm from "./AuthForm"
+import useAuthForm from "../hooks/useAuthForm"
 
 const PlotCard = () => {
-  const {
-    selectedMovie: movie,
-    watchlist,
-    addMovie,
-    removeMovie,
-    email,
-  } = useStore()
+  const { selectedMovie: movie, watchlist, addMovie, removeMovie } = useStore()
   const navigate = useNavigate()
-  const [isAuthFormOpen, setAuthFormOpen] = useState(false)
+  const { email, showAuthForm, toggleAuthForm, handleSubmit } = useAuthForm()
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }, [])
-
-  const isInWatchlist = movie
-    ? watchlist.some((m) => m.imdbID === movie.imdbID)
-    : false
-
-  const handleOpenAuthForm = () => {
-    setAuthFormOpen(true)
-  }
-
-  const handleCloseAuthForm = () => {
-    setAuthFormOpen(false)
-  }
 
   if (!movie) {
     return (
@@ -39,14 +22,24 @@ const PlotCard = () => {
     )
   }
 
+  const isInWatchlist = watchlist.some((m) => m.imdbID === movie.imdbID)
   const posterSrc =
     movie.Poster && movie.Poster !== "N/A" ? movie.Poster : Background
 
+  const handleWatchlistToggle = () => {
+    if (email) {
+      isInWatchlist ? removeMovie(movie.imdbID) : addMovie(movie)
+    } else {
+      toggleAuthForm()
+    }
+  }
+
   return (
-    <div className="animate-view relative flex w-full flex-col items-start justify-between sm:flex-row">
+    <div className="relative flex h-full w-full flex-col items-start justify-start sm:flex-row">
       <button
         onClick={() => navigate(-1)}
-        className="material-symbols-outlined absolute left-0 top-0 z-20 rounded-ee bg-orange-500 p-4 text-slate-50 shadow">
+        tabIndex={-1}
+        className="material-symbols-outlined absolute left-2 top-2 z-20 flex aspect-square w-12 items-center justify-center rounded-full bg-orange-600 p-2 text-lg text-slate-50 shadow">
         arrow_back_ios_new
       </button>
 
@@ -54,25 +47,17 @@ const PlotCard = () => {
         src={posterSrc}
         className="animate-slideIn left-0 top-0 z-10 w-full object-cover object-center sm:sticky sm:h-screen sm:max-w-md"
         role="presentation"
+        alt={movie.Title}
       />
 
-      <div className="animate-fadeIn flex h-full w-full flex-col items-start justify-evenly p-4 *:w-full">
+      <div className="animate-fadeIn flex h-full w-full flex-col items-start justify-evenly gap-6 border border-green-300 p-4 sm:h-screen">
         <div className="flex flex-col items-start justify-center gap-2">
           <p className="flex flex-1 items-start justify-start gap-2 px-2 font-head text-2xl font-bold sm:text-4xl">
             <span>{movie.Title}</span>
-            <button
-              onClick={() =>
-                email
-                  ? isInWatchlist
-                    ? removeMovie(movie.imdbID)
-                    : addMovie(movie)
-                  : handleOpenAuthForm()
-              }>
-              {isInWatchlist ? (
-                <span className="material-symbols-outlined">bookmark</span>
-              ) : (
-                <span className="material-symbols-outlined">bookmark</span>
-              )}
+            <button onClick={handleWatchlistToggle} tabIndex={-1}>
+              <span className="material-symbols-outlined">
+                {isInWatchlist ? "done_all" : "bookmark"}
+              </span>
             </button>
           </p>
 
@@ -84,19 +69,19 @@ const PlotCard = () => {
               </span>
             </p>
             <span className="aspect-square w-1 rounded-full bg-slate-900" />
-            <p className="">{movie.Runtime}</p>
+            <p>{movie.Runtime}</p>
 
             <span className="aspect-square w-1 rounded-full bg-slate-900" />
             <p className="uppercase">{movie.Rated}</p>
 
             <span className="aspect-square w-1 rounded-full bg-slate-900" />
-            <p className="">{movie.Year}</p>
+            <p>{movie.Year}</p>
           </div>
         </div>
 
-        <p className="flex-1 px-2 text-lg">{movie.Plot}</p>
+        <p className="flex flex-1 px-2 text-lg">{movie.Plot}</p>
 
-        <div className="misc-data flex flex-1 flex-col gap-2">
+        <div className="misc-data flex h-full flex-1 flex-col items-start justify-center gap-2">
           <div className="cast grid grid-cols-[auto,1fr] items-center justify-center gap-2 px-2">
             <p>Director:</p>
             <p>{movie.Director}</p>
@@ -117,7 +102,10 @@ const PlotCard = () => {
           </div>
         </div>
       </div>
-      {isAuthFormOpen && <AuthForm onClose={handleCloseAuthForm} />}
+
+      {showAuthForm && (
+        <AuthForm onSubmit={handleSubmit} onClose={toggleAuthForm} />
+      )}
     </div>
   )
 }

@@ -16,20 +16,20 @@ const CustomPrompt = ({ onClose, onConfirm }) => {
       <div className="rounded bg-white p-6 shadow-md">
         <h3 className="font-head text-lg font-bold">
           Create new{" "}
-          <span className="capitalize text-orange-500">Watchlist</span>
+          <span className="capitalize text-orange-600">Watchlist</span>
         </h3>
         <input
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="mt-4 w-full rounded border p-2 outline-1 outline-orange-500 focus:outline"
+          className="mt-4 w-full rounded border p-2 outline-1 outline-orange-600 focus:outline"
           placeholder="To-watch list"
           required
         />
         <div className="mt-4 flex justify-end gap-2 *:rounded *:px-4 *:py-2 *:outline-none">
           <button onClick={onClose}>Cancel</button>
           <button
-            className="bg-orange-500 px-4 py-2 text-white"
+            className="bg-orange-600 px-4 py-2 text-white"
             onClick={handleConfirm}>
             Confirm
           </button>

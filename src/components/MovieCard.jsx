@@ -1,14 +1,15 @@
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
-import useStore from "../store/useStore"
+import useAuthForm from "../hooks/useAuthForm"
 import Background from "/bg.jpg"
-import { useState } from "react"
 import AuthForm from "./AuthForm"
+import useStore from "../store/useStore"
 
 const MovieCard = ({ movie, isInWatchlist }) => {
-  const { addMovie, removeMovie, setSelectedMovie, email } = useStore()
+  const { showAuthForm, toggleAuthForm, handleSubmit, handleWatchlistAction } =
+    useAuthForm()
+  const { setSelectedMovie } = useStore()
   const navigate = useNavigate()
-  const [isAuthFormOpen, setAuthFormOpen] = useState(false)
 
   const posterSrc =
     movie.Poster && movie.Poster !== "N/A" ? movie.Poster : Background
@@ -20,51 +21,52 @@ const MovieCard = ({ movie, isInWatchlist }) => {
 
   const handleWatchlist = (e) => {
     e.stopPropagation()
-    email
-      ? isInWatchlist
-        ? removeMovie(movie.imdbID)
-        : addMovie(movie)
-      : handleOpenAuthForm()
-  }
-
-  const handleOpenAuthForm = () => {
-    setAuthFormOpen(true)
-  }
-
-  const handleCloseAuthForm = () => {
-    setAuthFormOpen(false)
+    handleWatchlistAction(isInWatchlist, movie, toggleAuthForm)
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-between overflow-hidden rounded rounded-t-none shadow">
+    <div className="relative flex h-full w-full flex-col items-center justify-between overflow-hidden rounded shadow">
       <div
         className="flex h-full w-full cursor-pointer flex-col items-center justify-start"
         onClick={handleViewDetails}>
-        <img
-          src={posterSrc}
-          className="h-[350px] w-full object-cover object-center"
-          alt={movie.imdbID}
-          role="presentation"
-        />
-        <p className="w-full p-2 font-medium">{`${movie.Title} (${movie.Year})`}</p>
+        <div className="relative flex h-auto w-full items-center justify-center overflow-hidden sm:h-[300px]">
+          <div
+            className={`absolute left-0 top-0 -z-10 h-full w-full bg-cover bg-center sm:h-[300px]`}
+            style={{
+              backgroundImage: `url(${posterSrc})`,
+              filter: "blur(2px)",
+            }}
+          />
+          <img
+            src={posterSrc}
+            className="relative z-0 h-auto w-full object-contain object-center"
+            alt={`${movie.Title} poster`}
+            role="presentation"
+            onError={(e) => {
+              e.target.src = Background
+            }}
+          />
+        </div>
+
+        <p className="w-full p-2 font-medium">{`${movie.Title} (${movie.Year || "N/A"})`}</p>
       </div>
 
-      <div className="flex w-full items-center justify-center gap-2 bg-orange-500 px-2 pb-3 pt-1 text-slate-50">
+      <div className="flex w-full items-center justify-center gap-2 bg-orange-600 px-2 pb-3 pt-1 text-slate-50">
         <p className="flex flex-1 flex-wrap items-end justify-start font-medium">
           <span className="material-symbols-outlined">star_half</span>
           {movie?.imdbRating !== "N/A" ? movie.imdbRating : "??"}/10
         </p>
         <button
-          className={`flex items-center justify-center rounded-full`}
+          className={`flex items-center justify-center rounded-full transition duration-300 ease-in-out hover:bg-orange-500`}
           onClick={handleWatchlist}>
-          {isInWatchlist ? (
-            <span className="material-symbols-outlined">done_all</span>
-          ) : (
-            <span className="material-symbols-outlined">bookmark</span>
-          )}
+          <span className="material-symbols-outlined">
+            {isInWatchlist ? "done_all" : "bookmark"}
+          </span>
         </button>
       </div>
-      {isAuthFormOpen && <AuthForm onClose={handleCloseAuthForm} />}
+      {showAuthForm && (
+        <AuthForm onSubmit={handleSubmit} onClose={toggleAuthForm} />
+      )}
     </div>
   )
 }

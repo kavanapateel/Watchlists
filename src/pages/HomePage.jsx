@@ -5,22 +5,26 @@ import useStore from "../store/useStore"
 
 const HomePage = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalResults, setTotalResults] = useState(0)
+
   const setSearchResults = useStore((state) => state.setSearchResults)
   const searchResults = useStore((state) => state.searchResults)
 
-  const handleSearch = async (results) => {
-    setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+  const handleSearch = async (results, totalResults) => {
     setSearchResults(results)
+    setTotalResults(totalResults)
     setIsLoading(false)
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-start p-6">
-      <div className="w-full rounded border border-orange-500 p-4 pb-6">
+    <div className="mb-4 flex h-full w-full flex-col items-center justify-start p-6">
+      <div className="w-full rounded border border-orange-600 p-4 pb-6">
         <h3 className="mb-4 text-3xl font-medium">
           Welcome to{" "}
-          <span className="font-semibold text-orange-500">Watchlists</span>
+          <span className="font-head font-semibold text-orange-600">
+            Watchlists
+          </span>
         </h3>
         <p>
           Browse movies, add them to watchlists and share them with friends.
@@ -34,10 +38,16 @@ const HomePage = () => {
           watched.
         </p>
       </div>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar
+        onSearch={handleSearch}
+        setIsLoading={setIsLoading}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalResults={totalResults}
+      />
 
       {isLoading ? (
-        <div className="h- flex w-full flex-1 items-center justify-center">
+        <div className="flex min-h-80 w-full flex-1 items-center justify-center">
           <div className="loader" />
         </div>
       ) : (

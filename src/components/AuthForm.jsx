@@ -1,56 +1,57 @@
 import { useState } from "react"
-import useStore from "../store/useStore"
 import PropTypes from "prop-types"
 
-const AuthForm = ({ onClose }) => {
+const AuthForm = ({ onSubmit, onClose }) => {
   const [emailInput, setEmailInput] = useState("")
-  const setEmail = useStore((state) => state.setEmail)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (emailInput) {
-      setEmail(emailInput)
-      onClose()
-    }
+    onSubmit(emailInput, onClose)
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
-      <div className="rounded bg-white p-6 shadow-lg">
-        <h2 className="mb-4 font-head text-xl font-bold">Register / Login</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="mb-2 block">
-            Provide email to save your watchlist
-          </label>
-          <input
-            type="email"
-            className="mb-4 w-full rounded border border-gray-300 p-2 outline-1 outline-orange-500 focus:outline"
-            value={emailInput}
-            onChange={(e) => setEmailInput(e.target.value)}
-            required
-          />
-          <div className="flex justify-end *:outline-none">
-            <button
-              type="button"
-              tabIndex={1}
-              className="mr-2 p-2 text-gray-600 focus:drop-shadow-[0_0_1px_#f97316]"
-              onClick={onClose}>
-              Cancel
-            </button>
-            <button
-              type="submit"
-              tabIndex={0}
-              className="rounded bg-orange-500 p-2 text-white focus:drop-shadow-[0_0_1px_#f97316]">
-              Submit
-            </button>
+    <div className="fixed inset-0 z-[999] flex h-full w-full items-center justify-center bg-black bg-opacity-50">
+      <form
+        onSubmit={handleSubmit}
+        className="rounded bg-white p-6 shadow-lg sm:w-1/3">
+        <div className="flex w-full items-start justify-between">
+          <div>
+            <h2 className="font-head text-xl font-bold">Register / Login</h2>
+            <label className="mb-4 block">
+              Provide email to save your watchlist
+            </label>
           </div>
-        </form>
-      </div>
+          <button
+            type="button"
+            className="material-symbols-outlined flex items-center justify-center p-0.5 text-base text-orange-600"
+            onClick={onClose}>
+            close
+          </button>
+        </div>
+        <input
+          type="email"
+          className="mb-4 w-full rounded border border-gray-300 p-2 outline-1 outline-orange-600 focus:outline"
+          value={emailInput}
+          onChange={(e) => setEmailInput(e.target.value)}
+          required
+        />
+        <div className="flex w-full flex-row-reverse justify-start gap-2 *:flex *:items-center *:justify-center *:gap-1 *:rounded *:px-2 *:py-1">
+          <button
+            type="submit"
+            className="bg-orange-600 text-white outline-1 outline-slate-50 focus:outline">
+            Submit
+            <span className="material-symbols-outlined text-base">
+              double_arrow
+            </span>
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
 
 AuthForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 }
 

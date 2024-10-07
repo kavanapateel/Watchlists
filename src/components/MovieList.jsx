@@ -6,6 +6,10 @@ const MovieList = ({ movies }) => {
   const watchlist = useStore((state) => state.watchlist)
   const setSelectedMovie = useStore((state) => state.setSelectedMovie)
 
+  if (movies.length === 0) {
+    return <p className="text-center text-gray-500">No movies available.</p>
+  }
+
   return (
     <div className="grid w-full grid-cols-1 items-start justify-start gap-4 sm:auto-cols-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {movies.map((movie) => {
@@ -14,7 +18,7 @@ const MovieList = ({ movies }) => {
         )
         return (
           <MovieCard
-            key={movie.imdbID}
+            key={`movie-${movie.imdbID}`}
             movie={movie}
             isInWatchlist={isInWatchlist}
             onClick={() => setSelectedMovie(movie)}
